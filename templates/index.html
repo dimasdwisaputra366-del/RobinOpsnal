@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Robinopsnal Bareskrim</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: #0b111e; font-family: 'Segoe UI', sans-serif; color: #fff; }
+        
+        /* 🔵 SIDEBAR DARK NAVY */
+        .sidebar { width: 280px; height: 100vh; position: fixed; top: 0; left: 0; background-color: #0d1b2a; padding-top: 20px; border-right: 1px solid #233554; }
+        .sidebar-header { padding: 0 24px 20px 24px; border-bottom: 1px solid #233554; margin-bottom: 20px; }
+        .sidebar-title { color: #fff; font-weight: bold; font-size: 18px; letter-spacing: 0.5px; }
+        .sidebar-sub { color: #8d99ae; font-size: 10px; display: block; }
+        
+        /* Navigasi Menu */
+        .nav-link-gmail { display: block; padding: 12px 24px; color: #a2a8d3; text-decoration: none; font-size: 14px; font-weight: 500; border-radius: 0 25px 25px 0; margin-right: 12px; margin-bottom: 4px; }
+        .nav-link-gmail:hover { background-color: #1b263b; color: #fff; }
+        .nav-link-gmail.active { background-color: #1d3557; color: #fff; font-weight: bold; border-left: 4px solid #d4af37; }
+        
+        .btn-compose { background-color: #d4af37; color: #0b111e; font-weight: bold; padding: 14px 24px; border-radius: 12px; text-decoration: none; display: inline-block; margin-left: 20px; margin-bottom: 20px; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .btn-compose:hover { background-color: #aa8c2c; color: #fff; }
+        
+        /* CONTAINER UTAMA & PENCARIAN LONJONG */
+        .main-content { margin-left: 280px; padding: 25px; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .search-container { background: #162238; border: 1px solid #233554; border-radius: 24px; padding: 8px 20px; display: flex; align-items: center; width: 380px; }
+        .search-input { border: none; outline: none; background: transparent; color: #fff; font-size: 14px; width: 100%; }
+        .search-input::placeholder { color: #a0aec0; }
+        
+        /* TABEL NAVY GELAP PENUH */
+        .mail-card { background: #162238; border: 1px solid #233554; border-radius: 16px; padding: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .table-gmail { width: 100%; border-collapse: collapse; text-align: left; }
+        .table-gmail th { border-bottom: 2px solid #233554; font-size: 12px; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.5px; padding: 14px 10px; font-weight: bold; }
+        .table-gmail td { vertical-align: middle; font-size: 13.5px; color: #e2e8f0; padding: 16px 10px; border-bottom: 1px solid #233554; }
+        .table-gmail tr:hover { background-color: #1d2d44; }
+        
+        .badge-kualifikasi { background-color: #2d3748; color: #cbd5e0; padding: 2px 6px; border-radius: 4px; font-size: 10px; border: 1px solid #4a5568; display: inline-block; margin-top: 5px; }
+        .badge-bagian { background-color: #233554; color: #d4af37; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; display: inline-block; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+    <!-- 1. SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <span class="sidebar-title">ROBINOPSNAL</span>
+            <span class="sidebar-sub">BARESKIM POLRI</span>
+        </div>
+
+        {% if role == 'operator' %}
+        <a href="/tambah" class="btn-compose">
+            Registrasi Surat
+        </a>
+        {% endif %}
+
+        <div class="nav">
+            <a href="/" class="nav-link-gmail {{ 'active' if not bagian_aktif and not kualifikasi_aktif }}">Semua Surat Masuk</a>
+            <a href="/?kualifikasi=Surat Asli" class="nav-link-gmail {{ 'active' if kualifikasi_aktif == 'Surat Asli' }}">Disposisi Asli</a>
+            <a href="/?kualifikasi=Surat Tembusan" class="nav-link-gmail {{ 'active' if kualifikasi_aktif == 'Surat Tembusan' }}">Surat Tembusan</a>
+            
+            <div style="padding: 15px 24px 5px 24px; color: #64748b; font-size: 11px; font-weight: bold; letter-spacing: 1px;">KATEGORI BAGIAN</div>
+            <a href="/?bagian=Bagrenopsnal" class="nav-link-gmail {{ 'active' if bagian_aktif == 'Bagrenopsnal' }}">Bagrenopsnal</a>
+            <a href="/?bagian=Bagkerma" class="nav-link-gmail {{ 'active' if bagian_aktif == 'Bagkerma' }}">Bagkerma</a>
+            <a href="/?bagian=Baganev" class="nav-link-gmail {{ 'active' if bagian_aktif == 'Baganev' }}">Baganev</a>
+            <a href="/?bagian=Bagyanmas" class="nav-link-gmail {{ 'active' if bagian_aktif == 'Bagyanmas' }}">Bagyanmas</a>
+            
+            <div style="margin-top: 20px; border-top: 1px solid #233554; padding-top: 10px;">
+                <a href="/logout" class="nav-link-gmail" style="color: #f87171;">Keluar (Logout)</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. MAIN CONTENT -->
+    <div class="main-content">
+        <div class="header-content">
+            <div>
+                <h4 style="font-size: 22px; font-weight: bold; margin-bottom: 4px;">Buku Agenda Surat Masuk</h4>
+                <small style="color: #a0aec0;">
+                    Bareskrim Polri • Peran: <span style="color: #d4af37; font-weight: bold;">{{ role | upper }}</span>
+                </small>
+            </div>
+            
+            <form action="/" method="GET">
+                {% if bagian_aktif %}<input type="hidden" name="bagian" value="{{ bagian_aktif }}">{% endif %}
+                {% if kualifikasi_aktif %}<input type="hidden" name="kualifikasi" value="{{ kualifikasi_aktif }}">{% endif %}
+                <div class="search-container">
+                    <input type="text" name="q" class="search-input" placeholder="Cari nomor, perihal..." value="{{ pencarian }}">
+                </div>
+            </form>
+        </div>
+
+        <div class="mail-card">
+            <table class="table-gmail">
+                <thead>
+                    <tr>
+                        <th style="width: 6%; text-align: center;">No</th>
+                        <th style="width: 16%;">Asal Surat</th>
+                        <th style="width: 34%;">Nomor & Perihal Naskah</th>
+                        <th style="width: 14%;">Tujuan / Bagian</th>
+                        <th style="width: 16%;">Petunjuk / Disposisi</th>
+                        <th style="width: 7%; text-align: center;">Jenis</th>
+                        <th style="width: 7%; text-align: center;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if data_list %}
+                        {% for data in data_list %}
+                        <tr>
+                            <td style="color: #a0aec0; font-weight: bold; text-align: center;">
+                                {% if data.parent_id %} <span style="color: #d4af37;">↳</span> {% endif %}
+                                {{ data.no }}
+                            </td>
+                            <td>
+                                <div style="font-weight: bold; color: #fff;">{{ data.terima_dari }}</div>
+                                <small style="color: #a0aec0; font-size: 11px;">Tgl: {{ data.tanggal }}</small>
+                            </td>
+                            <td>
+                                <div style="color: #8d99ae; font-size: 11px; font-family: monospace;">{{ data.nomor_tanggal_surat }}</div>
+                                <div style="margin-top: 4px; font-weight: 500; line-height: 1.4;">{{ data.perihal }}</div>
+                                <div>
+                                    <span class="badge-kualifikasi">{{ data.kualifikasi }}</span>
+                                    {% if data.lampiran and data.lampiran != '-' %}
+                                        <span style="color: #a0aec0; font-size: 11px; margin-left: 8px;">📎 {{ data.lampiran }}</span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td>
+                                <div style="font-weight: bold; color: #cbd5e0;">{{ data.kepada }}</div>
+                                <span class="badge-bagian">{{ data.bagian_menangani }}</span>
+                            </td>
+                            <td style="font-size: 13px; color: #cbd5e0; line-height: 1.4;">
+                                {{ data.disposisi }}
+                            </td>
+                            <td style="text-align: center;">
+                                {% if data.jenis_surat == 'Keluar' or data.jenis_surat == 'keluar' %}
+                                    <span style="font-weight: bold; padding: 4px 12px; border-radius: 20px; font-size: 11px; display: inline-block; background-color: #78350f; color: #fbbf24; border: 1px solid #d97706;">Keluar</span>
+                                {% else %}
+                                    <span style="font-weight: bold; padding: 4px 12px; border-radius: 20px; font-size: 11px; display: inline-block; background-color: #1e3a8a; color: #60a5fa; border: 1px solid #3b82f6;">Masuk</span>
+                                {% endif %}
+                            </td>
+                            
+                            <!-- 🚨 FIX LOGIKA LAMPU INDIKATOR STATUS DENGAN KODE LINGKARAN UTUH -->
+                            <td style="text-align: center; white-space: nowrap;">
+                                {% if data.status == 'Selesai' or data.status == 'selesai' %}
+                                    <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; vertical-align: middle; background-color: #10b981; box-shadow: 0 0 8px #10b981;"></span>
+                                    <small style="color: #34d399; font-weight: bold;">Selesai</small>
+{% elif data.status == 'Diproses' or data.status == 'diproses' %}
+
+Diproses
+{% else %}
+
+Baru
+{% endif %}
+
+
+{% endfor %}
+{% else %}
+Data surat tidak ditemukan.
+{% endif %}

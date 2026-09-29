@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrasi Surat Masuk - Robinopsnal</title>
+    <link href="https://jsdelivr.net" rel="stylesheet">
+    <link href="https://cloudflare.com" rel="stylesheet">
+    <style>
+        body { background-color: #0b111e; font-family: 'Segoe UI', sans-serif; padding: 40px 0; }
+        .form-card { background: #162238; border: 1px solid #233554; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); padding: 35px; }
+        .form-control-dark { background-color: #0b111e; border: 1px solid #233554; color: #fff; border-radius: 8px; padding: 10px 14px; font-size: 14px; }
+        .form-control-dark:focus { background-color: #0b111e; border-color: #d4af37; color: #fff; box-shadow: none; }
+        .form-select-dark { background-color: #0b111e; border: 1px solid #233554; color: #fff; border-radius: 8px; padding: 10px 14px; font-size: 14px; }
+        .form-select-dark:focus { background-color: #0b111e; border-color: #d4af37; color: #fff; box-shadow: none; }
+        .text-gold { color: #d4af37; }
+        .btn-gold { background-color: #d4af37; color: #0b111e; font-weight: bold; border: none; padding: 10px 24px; border-radius: 8px; transition: 0.3s; }
+        .btn-gold:hover { background-color: #aa8c2c; color: #fff; }
+        .btn-outline-dark-custom { background-color: transparent; border: 1px solid #233554; color: #a0aec0; padding: 10px 24px; border-radius: 8px; text-decoration: none; font-weight: 500; font-size: 14px; transition: 0.3s; }
+        .btn-outline-dark-custom:hover { background-color: #233554; color: #fff; }
+    </style>
+</head>
+<body>
+
+    <div class="container" style="max-width: 850px;">
+        <div class="form-card">
+            <!-- Header Form -->
+            <div class="d-flex align-items-center mb-4 border-bottom border-secondary pb-3">
+                <i class="fa-solid fa-file-circle-plus text-gold fa-2x me-3"></i>
+                <div>
+                    <h4 class="text-white fw-bold m-0" style="letter-spacing: 0.5px;">REGISTRASI NASKAH SURAT MASUK</h4>
+                    <small class="text-muted">Biro Pembinaan dan Operasional Bareskrim Polri</small>
+                </div>
+            </div>
+
+            <!-- Form Start -->
+            <form action="/tambah" method="POST">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label text-white-50 small fw-bold">TANGGAL TERIMA</label>
+                        <input type="text" name="tanggal" class="form-control form-control-dark" placeholder="Contoh: 27-09-2026" required autocomplete="off">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-white-50 small fw-bold">NO. AGENDA SURAT</label>
+                        <input type="number" name="no" class="form-control form-control-dark" placeholder="Contoh: 499" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label text-white-50 small fw-bold">KUALIFIKASI SURAT</label>
+                        <select name="kualifikasi" class="form-select form-select-dark" required>
+                            <option value="Surat Asli">Surat Asli (Tujuan Karobinops/Kabareskrim)</option>
+                            <option value="Surat Tembusan">Surat Tembusan</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-white-50 small fw-bold">NOMOR & TANGGAL NASKAH SURAT</label>
+                    <input type="text" name="nomor_tanggal_surat" class="form-control form-control-dark" placeholder="Contoh: B/ND-796/IX/DIK.5./2026/Bagrenopsnal (17 September 2026)" required autocomplete="off">
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-white-50 small fw-bold">TERIMA DARI (ASAL PENGIRIM)</label>
+                        <input type="text" name="terima_dari" class="form-control form-control-dark" placeholder="Contoh: Kabagrenopsnal Bareskrim" required autocomplete="off">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-white-50 small fw-bold">KEPADA (TUJUAN UTAMA SURAT)</label>
+                        <input type="text" name="kepada" class="form-control form-control-dark" placeholder="Contoh: Karobinops" required autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-white-50 small fw-bold">ISI RINGKAS / PERIHAL SURAT</label>
+                    <textarea name="perihal" class="form-control form-control-dark" rows="3" placeholder="Tulis rincian perihal surat masuk di sini..." required></textarea>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label text-white-50 small fw-bold">LAMPIRAN BERKAS</label>
+                        <input type="text" name="lampiran" class="form-control form-control-dark" placeholder="Contoh: 1 berkas / -" required autocomplete="off">
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label text-white-50 small fw-bold">BAGIAN YANG MENANGANI (DISPOSISI)</label>
+                        <select name="bagian_menangani" class="form-select form-select-dark" required>
+                            <option value="Bagrenopsnal">Bagrenopsnal (Perencanaan Operasional)</option>
+                            <option value="Bagkerma">Bagkerma (Kerja Sama)</option>
+                            <option value="Baganev">Baganev (Analisis Evaluasi)</option>
+                            <option value="Bagyanmas">Bagyanmas (Pelayanan Masyarakat)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label text-white-50 small fw-bold">KETERANGAN / DISPOSISI PETUNJUK KAROBINOPS</label>
+                    <textarea name="disposisi" class="form-control form-control-dark" rows="2" placeholder="Contoh: Yth Kabagrenops: Simulasikan ke pers..." required></textarea>
+                </div>
+
+                <!-- Tombol Aksi -->
+                <div class="d-flex justify-content-between border-top border-secondary pt-3">
+                    <a href="/" class="btn-outline-dark-custom"><i class="fa-solid fa-arrow-left me-2"></i>Batal / Kembali</a>
+                    <button type="submit" class="btn btn-gold shadow-sm"><i class="fa-solid fa-floppy-disk me-2"></i>Simpan ke Buku Agenda</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

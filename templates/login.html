@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Robinopsnal Bareskrim</title>
+    <link href="https://jsdelivr.net" rel="stylesheet">
+    <link href="https://cloudflare.com" rel="stylesheet">
+    <style>
+        body { background-color: #0b111e; font-family: 'Segoe UI', sans-serif; display: flex; align-items: center; height: 100vh; }
+        .login-card { background: #162238; border: 1px solid #233554; border-radius: 16px; width: 100%; max-width: 420px; margin: auto; padding: 40px 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .form-control-dark { background-color: #0b111e; border: 1px solid #233554; color: #fff; border-radius: 8px; padding: 12px; }
+        .form-control-dark:focus { background-color: #0b111e; border-color: #0d6efd; color: #fff; box-shadow: none; }
+        .btn-gold { background-color: #d4af37; color: #0b111e; font-weight: bold; border: none; padding: 12px; border-radius: 8px; width: 100%; transition: 0.3s; }
+        .btn-gold:hover { background-color: #aa8c2c; color: #fff; }
+    </style>
+</head>
+<body>
+
+    <div class="login-card text-center">
+        <!-- Logo Perisai Polisi Lambang Keamanan -->
+        <div class="mb-3 text-warning">
+            <i class="fa-solid fa-shield-halved fa-4x" style="color: #d4af37;"></i>
+        </div>
+        <h4 class="text-white fw-bold mb-1" style="letter-spacing: 0.5px;">ROBINOPSNAL</h4>
+        <p class="text-muted small mb-4">Sistem Buku Agenda Surat Masuk Bareskrim Polri</p>
+
+        <!-- Notifikasi Pesan Error jika Akun Salah -->
+        {% if error %}
+        <div class="alert alert-danger p-2 small mb-3" role="alert">
+            <i class="fa-solid fa-triangle-exclamation me-1"></i> {{ error }}
+        </div>
+        {% endif %}
+
+        <form action="/login" method="POST">
+            <div class="mb-3 text-start">
+                <label class="form-label text-white-50 small fw-bold">NRP / USERNAME INTERNAL</label>
+                <input type="text" name="username" class="form-control form-control-dark" placeholder="Masukkan username..." required autocomplete="off">
+            </div>
+            <div class="mb-4 text-start">
+                <label class="form-label text-white-50 small fw-bold">PASSWORD AKSES</label>
+                <input type="password" name="password" class="form-control form-control-dark" placeholder="Masukkan password..." required>
+            </div>
+            <button type="submit" class="btn btn-gold shadow-sm">MASUK KE SISTEM</button>
+        </form>
+    </div>
+
+</body>
+</html>

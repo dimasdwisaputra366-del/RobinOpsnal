@@ -1,3 +1,5 @@
+from datetime import date, datetime, timedelta
+
 from flask import Flask, render_template, request, redirect, url_for, session
 
 app = Flask(__name__)
@@ -43,6 +45,84 @@ data_surat = [
     }
 ]
 
+
+def _parse_tanggal_surat(value):
+    for date_format in ("%d-%m-%Y", "%Y-%m-%d"):
+        try:
+            return datetime.strptime(value, date_format).date()
+        except (TypeError, ValueError):
+            continue
+    return None
+
+
+def _build_analytics(period):
+    parsed_dates = [
+        (surat, _parse_tanggal_surat(surat.get("tanggal")))
+        for surat in data_surat
+    ]
+    valid_dates = [tanggal for _, tanggal in parsed_dates if tanggal]
+    anchor = max(valid_dates) if valid_dates else date.today()
+
+    if period == "bulanan":
+        anchor_month = anchor.replace(day=1)
+        nama_bulan = (
+            "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+            "Juli", "Agustus", "September", "Oktober", "November", "Desember",
+        )
+        buckets = []
+        for offset in range(5, -1, -1):
+            month_index = anchor_month.year * 12 + anchor_month.month - 1 - offset
+            year, month_index = divmod(month_index, 12)
+            month = month_index + 1
+            bucket_date = date(year, month, 1)
+            buckets.append({
+                "key": bucket_date.strftime("%Y-%m"),
+                "label": f"{nama_bulan[month - 1][:3]} {year}",
+                "title": f"{nama_bulan[month - 1]} {year}",
+            })
+    else:
+        period = "mingguan"
+        buckets = [
+            {
+                "key": (anchor - timedelta(days=offset)).isoformat(),
+                "label": (anchor - timedelta(days=offset)).strftime("%d/%m"),
+                "title": (anchor - timedelta(days=offset)).strftime("%d-%m-%Y"),
+            }
+            for offset in range(6, -1, -1)
+        ]
+
+    bucket_by_key = {}
+    for bucket in buckets:
+        bucket.update({"baru": 0, "diproses": 0, "selesai": 0, "total": 0})
+        bucket_by_key[bucket["key"]] = bucket
+
+    for surat, tanggal in parsed_dates:
+        if not tanggal:
+            continue
+        key = tanggal.strftime("%Y-%m") if period == "bulanan" else tanggal.isoformat()
+        bucket = bucket_by_key.get(key)
+        if not bucket:
+            continue
+        status = (surat.get("status") or "").strip().lower()
+        status_key = status if status in ("baru", "diproses", "selesai") else "baru"
+        bucket[status_key] += 1
+        bucket["total"] += 1
+
+    max_total = max((bucket["total"] for bucket in buckets), default=0)
+    for bucket in buckets:
+        for status in ("baru", "diproses", "selesai"):
+            bucket[f"{status}_height"] = (
+                bucket[status] / max_total * 100 if max_total else 0
+            )
+
+    totals = {
+        status: sum(bucket[status] for bucket in buckets)
+        for status in ("baru", "diproses", "selesai")
+    }
+    totals["total"] = sum(bucket["total"] for bucket in buckets)
+    return buckets, totals, anchor, period
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     pesan_error = None
@@ -71,6 +151,11 @@ def index():
     kata_kunci = request.args.get('q', '').strip().lower()
     filter_bagian = request.args.get('bagian', '').strip()
     filter_kualifikasi = request.args.get('kualifikasi', '').strip()
+    periode_analitik = request.args.get('periode', 'mingguan').strip().lower()
+    if periode_analitik not in ('mingguan', 'bulanan'):
+        periode_analitik = 'mingguan'
+    analytics_visible = request.args.get('analitik') == '1'
+    grafik, ringkasan_analitik, tanggal_terbaru, periode_analitik = _build_analytics(periode_analitik)
     
     # Kelompokkan anak surat di bawah induknya masing-masing
     surat_induk = [s for s in data_surat if s.get('parent_id') is None]
@@ -109,7 +194,12 @@ def index():
         pencarian=kata_kunci, 
         bagian_aktif=filter_bagian,
         kualifikasi_aktif=filter_kualifikasi,
-        role=session.get('role')
+        role=session.get('role'),
+        grafik=grafik,
+        ringkasan_analitik=ringkasan_analitik,
+        tanggal_terbaru=tanggal_terbaru,
+        periode_analitik=periode_analitik,
+        analytics_visible=analytics_visible
     )
 
 @app.route('/tambah', methods=['GET', 'POST'])

@@ -2,106 +2,205 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Registrasi Surat Masuk - Robinopsnal</title>
-    <link href="https://jsdelivr.net" rel="stylesheet">
-    <link href="https://cloudflare.com" rel="stylesheet">
     <style>
-        body { background-color: #0b111e; font-family: 'Segoe UI', sans-serif; padding: 40px 0; }
-        .form-card { background: #162238; border: 1px solid #233554; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); padding: 35px; }
-        .form-control-dark { background-color: #0b111e; border: 1px solid #233554; color: #fff; border-radius: 8px; padding: 10px 14px; font-size: 14px; }
-        .form-control-dark:focus { background-color: #0b111e; border-color: #d4af37; color: #fff; box-shadow: none; }
-        .form-select-dark { background-color: #0b111e; border: 1px solid #233554; color: #fff; border-radius: 8px; padding: 10px 14px; font-size: 14px; }
-        .form-select-dark:focus { background-color: #0b111e; border-color: #d4af37; color: #fff; box-shadow: none; }
-        .text-gold { color: #d4af37; }
-        .btn-gold { background-color: #d4af37; color: #0b111e; font-weight: bold; border: none; padding: 10px 24px; border-radius: 8px; transition: 0.3s; }
-        .btn-gold:hover { background-color: #aa8c2c; color: #fff; }
-        .btn-outline-dark-custom { background-color: transparent; border: 1px solid #233554; color: #a0aec0; padding: 10px 24px; border-radius: 8px; text-decoration: none; font-weight: 500; font-size: 14px; transition: 0.3s; }
-        .btn-outline-dark-custom:hover { background-color: #233554; color: #fff; }
+        :root {
+            color-scheme: dark;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #0b1220;
+            color: #eef2f7;
+            font-synthesis: none;
+        }
+        * { box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 42px 24px;
+            background:
+                radial-gradient(ellipse at 50% 0%, rgba(212, 175, 55, 0.08), transparent 38%),
+                #0b1220;
+        }
+        .page { width: min(100%, 900px); margin: 0 auto; }
+        .form-card {
+            overflow: hidden;
+            border: 1px solid #26354b;
+            border-radius: 18px;
+            background: #121d2e;
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
+        }
+        .page-header { padding: 30px 36px 26px; border-bottom: 1px solid #26354b; }
+        .eyebrow {
+            margin: 0 0 8px;
+            color: #d8b94f;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        h1 { margin: 0; font-size: 23px; letter-spacing: 0.2px; }
+        .subtitle { margin: 8px 0 0; color: #9ba9bc; font-size: 13px; line-height: 1.5; }
+        form { padding: 28px 36px 30px; }
+        .section-title {
+            margin: 0 0 17px;
+            color: #d8b94f;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.1px;
+            text-transform: uppercase;
+        }
+        .fields {
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            gap: 18px 16px;
+            margin-bottom: 26px;
+        }
+        .field { grid-column: span 6; min-width: 0; }
+        .field.third { grid-column: span 4; }
+        .field.wide { grid-column: span 8; }
+        .field.full { grid-column: 1 / -1; }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #d6deea;
+            font-size: 12px;
+            font-weight: 650;
+        }
+        input, select, textarea {
+            display: block;
+            width: 100%;
+            min-height: 44px;
+            padding: 10px 12px;
+            border: 1px solid #314158;
+            border-radius: 9px;
+            outline: none;
+            background: #0c1524;
+            color: #f3f6fa;
+            font: inherit;
+            font-size: 13px;
+            transition: border-color 150ms ease, box-shadow 150ms ease;
+        }
+        input::placeholder, textarea::placeholder { color: #718096; }
+        select { cursor: pointer; }
+        textarea { min-height: 92px; resize: vertical; line-height: 1.5; }
+        textarea.short { min-height: 76px; }
+        input:focus, select:focus, textarea:focus {
+            border-color: #d4af37;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.14);
+        }
+        .actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding-top: 23px;
+            border-top: 1px solid #26354b;
+        }
+        .button {
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 18px;
+            border: 1px solid #314158;
+            border-radius: 9px;
+            color: #c2ccda;
+            background: transparent;
+            font: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+        }
+        .button:hover { border-color: #52647c; background: #1a2940; color: #fff; }
+        .button-primary { border-color: #d4af37; background: #d4af37; color: #111827; }
+        .button-primary:hover { border-color: #e2c452; background: #e2c452; color: #111827; }
+        .button:focus-visible { outline: 3px solid rgba(212, 175, 55, 0.35); outline-offset: 3px; }
+        @media (max-width: 650px) {
+            body { padding: 20px 14px; }
+            .page-header { padding: 24px 22px 21px; }
+            form { padding: 23px 22px 24px; }
+            .field, .field.third, .field.wide { grid-column: 1 / -1; }
+        }
+        @media (max-width: 420px) {
+            .actions { align-items: stretch; flex-direction: column-reverse; }
+            .button { width: 100%; }
+        }
     </style>
 </head>
 <body>
+    <main class="page">
+        <section class="form-card" aria-labelledby="form-title">
+            <header class="page-header">
+                <p class="eyebrow">Buku Agenda · Surat Masuk</p>
+                <h1 id="form-title">Registrasi naskah surat</h1>
+                <p class="subtitle">Lengkapi informasi surat untuk mencatatnya ke dalam buku agenda.</p>
+            </header>
 
-    <div class="container" style="max-width: 850px;">
-        <div class="form-card">
-            <!-- Header Form -->
-            <div class="d-flex align-items-center mb-4 border-bottom border-secondary pb-3">
-                <i class="fa-solid fa-file-circle-plus text-gold fa-2x me-3"></i>
-                <div>
-                    <h4 class="text-white fw-bold m-0" style="letter-spacing: 0.5px;">REGISTRASI NASKAH SURAT MASUK</h4>
-                    <small class="text-muted">Biro Pembinaan dan Operasional Bareskrim Polri</small>
-                </div>
-            </div>
-
-            <!-- Form Start -->
             <form action="/tambah" method="POST">
-                <div class="row mb-3">
-                    <div class="col-md-4">
-                        <label class="form-label text-white-50 small fw-bold">TANGGAL TERIMA</label>
-                        <input type="text" name="tanggal" class="form-control form-control-dark" placeholder="Contoh: 27-09-2026" required autocomplete="off">
+                <h2 class="section-title">Informasi penerimaan</h2>
+                <div class="fields">
+                    <div class="field third">
+                        <label for="tanggal">Tanggal terima</label>
+                        <input id="tanggal" type="text" name="tanggal" placeholder="Contoh: 27-09-2026" required autocomplete="off">
                     </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-white-50 small fw-bold">NO. AGENDA SURAT</label>
-                        <input type="number" name="no" class="form-control form-control-dark" placeholder="Contoh: 499" required>
+                    <div class="field third">
+                        <label for="no">No. agenda surat</label>
+                        <input id="no" type="number" name="no" placeholder="Contoh: 499" required>
                     </div>
-                    <div class="col-md-4">
-                        <label class="form-label text-white-50 small fw-bold">KUALIFIKASI SURAT</label>
-                        <select name="kualifikasi" class="form-select form-select-dark" required>
+                    <div class="field third">
+                        <label for="kualifikasi">Kualifikasi surat</label>
+                        <select id="kualifikasi" name="kualifikasi" required>
                             <option value="Surat Asli">Surat Asli (Tujuan Karobinops/Kabareskrim)</option>
                             <option value="Surat Tembusan">Surat Tembusan</option>
                         </select>
                     </div>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label text-white-50 small fw-bold">NOMOR & TANGGAL NASKAH SURAT</label>
-                    <input type="text" name="nomor_tanggal_surat" class="form-control form-control-dark" placeholder="Contoh: B/ND-796/IX/DIK.5./2026/Bagrenopsnal (17 September 2026)" required autocomplete="off">
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label text-white-50 small fw-bold">TERIMA DARI (ASAL PENGIRIM)</label>
-                        <input type="text" name="terima_dari" class="form-control form-control-dark" placeholder="Contoh: Kabagrenopsnal Bareskrim" required autocomplete="off">
+                    <div class="field full">
+                        <label for="nomor_tanggal_surat">Nomor &amp; tanggal naskah surat</label>
+                        <input id="nomor_tanggal_surat" type="text" name="nomor_tanggal_surat" placeholder="Contoh: B/ND-796/IX/DIK.5./2026/Bagrenopsnal (17 September 2026)" required autocomplete="off">
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label text-white-50 small fw-bold">KEPADA (TUJUAN UTAMA SURAT)</label>
-                        <input type="text" name="kepada" class="form-control form-control-dark" placeholder="Contoh: Karobinops" required autocomplete="off">
+                    <div class="field">
+                        <label for="terima_dari">Terima dari (asal pengirim)</label>
+                        <input id="terima_dari" type="text" name="terima_dari" placeholder="Contoh: Kabagrenopsnal Bareskrim" required autocomplete="off">
+                    </div>
+                    <div class="field">
+                        <label for="kepada">Kepada (tujuan utama surat)</label>
+                        <input id="kepada" type="text" name="kepada" placeholder="Contoh: Karobinops" required autocomplete="off">
+                    </div>
+                    <div class="field full">
+                        <label for="perihal">Isi ringkas / perihal surat</label>
+                        <textarea id="perihal" name="perihal" rows="3" placeholder="Tulis ringkasan perihal surat masuk..." required></textarea>
                     </div>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label text-white-50 small fw-bold">ISI RINGKAS / PERIHAL SURAT</label>
-                    <textarea name="perihal" class="form-control form-control-dark" rows="3" placeholder="Tulis rincian perihal surat masuk di sini..." required></textarea>
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col-md-4">
-                        <label class="form-label text-white-50 small fw-bold">LAMPIRAN BERKAS</label>
-                        <input type="text" name="lampiran" class="form-control form-control-dark" placeholder="Contoh: 1 berkas / -" required autocomplete="off">
+                <h2 class="section-title">Penanganan dan disposisi</h2>
+                <div class="fields">
+                    <div class="field third">
+                        <label for="lampiran">Lampiran berkas</label>
+                        <input id="lampiran" type="text" name="lampiran" placeholder="Contoh: 1 berkas / -" required autocomplete="off">
                     </div>
-                    <div class="col-md-8">
-                        <label class="form-label text-white-50 small fw-bold">BAGIAN YANG MENANGANI (DISPOSISI)</label>
-                        <select name="bagian_menangani" class="form-select form-select-dark" required>
+                    <div class="field wide">
+                        <label for="bagian_menangani">Bagian yang menangani (disposisi)</label>
+                        <select id="bagian_menangani" name="bagian_menangani" required>
                             <option value="Bagrenopsnal">Bagrenopsnal (Perencanaan Operasional)</option>
                             <option value="Bagkerma">Bagkerma (Kerja Sama)</option>
                             <option value="Baganev">Baganev (Analisis Evaluasi)</option>
                             <option value="Bagyanmas">Bagyanmas (Pelayanan Masyarakat)</option>
                         </select>
                     </div>
+                    <div class="field full">
+                        <label for="disposisi">Keterangan / petunjuk disposisi Karobinops</label>
+                        <textarea class="short" id="disposisi" name="disposisi" rows="2" placeholder="Contoh: Yth Kabagrenops: Simulasikan ke pers..." required></textarea>
+                    </div>
                 </div>
 
-                <div class="mb-4">
-                    <label class="form-label text-white-50 small fw-bold">KETERANGAN / DISPOSISI PETUNJUK KAROBINOPS</label>
-                    <textarea name="disposisi" class="form-control form-control-dark" rows="2" placeholder="Contoh: Yth Kabagrenops: Simulasikan ke pers..." required></textarea>
-                </div>
-
-                <!-- Tombol Aksi -->
-                <div class="d-flex justify-content-between border-top border-secondary pt-3">
-                    <a href="/" class="btn-outline-dark-custom"><i class="fa-solid fa-arrow-left me-2"></i>Batal / Kembali</a>
-                    <button type="submit" class="btn btn-gold shadow-sm"><i class="fa-solid fa-floppy-disk me-2"></i>Simpan ke Buku Agenda</button>
+                <div class="actions">
+                    <a href="/" class="button">Batal / Kembali</a>
+                    <button type="submit" class="button button-primary">Simpan ke buku agenda</button>
                 </div>
             </form>
-        </div>
-    </div>
-
+        </section>
+    </main>
 </body>
 </html>
